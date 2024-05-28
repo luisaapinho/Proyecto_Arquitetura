@@ -68,6 +68,54 @@
   :root {
     scroll-behavior: smooth; } }
 
+@font-face {
+      font-family: 'MyTitleFont';
+      src: url('../fonts/PilatedfreeRegular-K7xPo.otf');
+      
+  }
+  
+  #title{
+    font-family:'MyTitleFont' !important;
+    font-size: 7rem;
+    color: rgb(160, 160, 160);
+  
+  }
+
+  
+  #titleFooter{
+    font-family:'MyTitleFont' !important;
+    font-size: 3rem;
+    color: rgb(186, 185, 185);
+  
+  }
+
+  #footer{
+    background-color: rgb(92, 92, 92);
+  }
+
+  #content{
+    font-weight: 100;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: rgb(160, 160, 160);
+  }
+  
+  
+  #footerCreator{
+    color: rgb(160, 160, 160);
+  }
+  
+  #navFooter a{
+    color: rgb(160, 160, 160);
+    font-weight: 200;
+  }
+
+  #navFooter a:hover{
+    color: rgb(160, 160, 160);
+    font-weight: 500;
+  }
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
