@@ -14,7 +14,6 @@ from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
 from apps.authentication.models import Users
-
 from apps.authentication.util import verify_pass
 
 @blueprint.route('/')
@@ -28,7 +27,7 @@ def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
 
-        # read form data
+        # Read form data
         username = request.form['username']
         password = request.form['password']
 
@@ -37,7 +36,6 @@ def login():
 
         # Check the password
         if user and verify_pass(password, user.password):
-
             login_user(user)
             return redirect(url_for('authentication_blueprint.route_default'))
 
@@ -51,7 +49,6 @@ def login():
                                form=login_form)
     return redirect(url_for('home_blueprint.index'))
 
-
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     create_account_form = CreateAccountForm(request.form)
@@ -60,7 +57,7 @@ def register():
         username = request.form['username']
         email = request.form['email']
 
-        # Check usename exists
+        # Check username exists
         user = Users.query.filter_by(username=username).first()
         if user:
             return render_template('accounts/register.html',
@@ -76,12 +73,12 @@ def register():
                                    success=False,
                                    form=create_account_form)
 
-        # else we can create the user
+        # Else we can create the user
         user = Users(**request.form)
         db.session.add(user)
         db.session.commit()
 
-        # Delete user from session
+        # Log out the user
         logout_user()
 
         return render_template('accounts/register.html',
@@ -92,11 +89,10 @@ def register():
     else:
         return render_template('accounts/register.html', form=create_account_form)
 
-
 @blueprint.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('authentication_blueprint.login')) 
+    return redirect(url_for('authentication_blueprint.login'))
 
 # Errors
 
@@ -104,16 +100,13 @@ def logout():
 def unauthorized_handler():
     return render_template('home/page-403.html'), 403
 
-
 @blueprint.errorhandler(403)
 def access_forbidden(error):
     return render_template('home/page-403.html'), 403
 
-
 @blueprint.errorhandler(404)
 def not_found_error(error):
     return render_template('home/page-404.html'), 404
-
 
 @blueprint.errorhandler(500)
 def internal_error(error):
