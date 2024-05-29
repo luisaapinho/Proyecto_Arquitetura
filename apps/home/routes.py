@@ -7,13 +7,22 @@ from apps.home import blueprint
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
+from apps.home.models import Product
 
 
 @blueprint.route('/index')
 @login_required
 def index():
-
+    print("teste1")
     return render_template('home/index.html', segment='index')
+
+@blueprint.route('/shop')
+@login_required
+def shop():
+        print("teste2")
+        products = Product.get_all()
+        print(products)  # Check the products being retrieved
+        return render_template('home/shop.html', segment='shop', products=products)
 
 
 @blueprint.route('/<template>')
