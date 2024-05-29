@@ -1,15 +1,3 @@
-<!--
-=========================================================
-* Material Kit 2 - v3.0.0
-=========================================================
-
-* Product Page:  https://www.creative-tim.com/product/material-kit 
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
 
@@ -34,12 +22,41 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="/static/assets/css/material-kit.css?v=3.0.0" rel="stylesheet" />
+  <link id="pagestyle" href="/static/assets/css/cards.css" rel="stylesheet" />
+
+
+  <style>
+    #cardProduct {
+      background-color: rgba(110, 110, 110, 0.192);
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    
+    #cardProduct:hover {
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    
+    #cardContainer {
+      padding: 2px 16px;
+    }
+    #cardTitle {
+      color: rgb(177, 177, 177);
+      text-align: center;
+    }
+
+    #cardDescription {
+      color: rgb(177, 177, 177);
+      text-align: center;
+    }
+
+    #cardPrice {
+      color: rgb(177, 177, 177);
+      text-align: center;
+    }
+    </style>
 
 </head>
 <body class="presentation-page bg-gray-200">
-  
-  {% include 'includes/navigation.html' %} 
-
   <!-- -------- START HEADER 1 w/ text and image on right ------- -->
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark navbar-absolute bg-transparent shadow-none">
@@ -70,7 +87,6 @@
               Store
             </a>
           </li>
-
           {% if current_user.is_authenticated %}
           <li class="nav-item ms-lg-auto">
             <a class="nav-link nav-link-icon me-2" 
@@ -80,9 +96,7 @@
             </a>
           </li>          
         {% endif %}
-
         </ul>
-
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link text-white" href="https://twitter.com/CreativeTim">
@@ -103,29 +117,36 @@
       </div>
     </div>
   </nav>
-  <div class="page-header min-vh-100" style="background-image: url(https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/imagem_plugin/roupasnovaral.jpg);" loading="lazy">
+  <div class="page-header min-vh-100" style="background-image: url('./static/assets/img/backgroundProject.png')" loading="lazy">
     <span class="mask bg-gradient-dark opacity-5"></span>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-          <h1 class="text-white mb-4">Material Kit</h1>
-          <p class="text-white opacity-8 lead pe-5 me-5">The time is now for it be okay to be great. People in this world shun people for being nice. </p>
-          <div class="buttons">
-            <button type="button" class="btn btn-white mt-4">Get Started</button>
-            <button type="button" class="btn text-white shadow-none mt-4">Read more</button>
+    <!-- CÓDIGO DO CARD-->
+    
+    
+
+        <div class="card"  id="cardProduct">
+            <img src="" alt="Avatar" style="width:20vw;" id="cardImage">
+            <div class="container" id="cardContainer">
+              <h4 id="cardTitle"><b>Nike</b></h4>
+              <p id="cardDescription">Teste</p>
+              <p id="cardPrice">20€</p>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    
+
+          
+
+
+
+
+
+    <!---->
+
+
 </header>
 <!-- -------- END HEADER 1 w/ text and image on right ------- -->
-  
-
-
   <footer class="footer pt-5 mt-5">
     <div class="container">
-      <div class=" row">
+      <div class="row">
         <div class="col-md-3 mb-4 ms-auto">
           <div>
             <a href="https://appseed.us/apps/flask-apps/flask-material-kit">
@@ -160,14 +181,8 @@
                   <i class="fab fa-youtube text-lg opacity-8"></i>
                 </a>
               </li>
-            
-              
-
             </ul>
-
-
           </div>
-
         </div>
         <div class="col-md-2 col-sm-6 col-6 mb-4">
           <div>
@@ -323,5 +338,4 @@
     }
   </script>
 </body>
-
 </html>
