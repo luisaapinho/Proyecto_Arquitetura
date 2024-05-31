@@ -18,11 +18,7 @@ class Users(db.Model, UserMixin):
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
-            # Depending on whether value is an iterable or not, we must
-            # unpack its value (when **kwargs is request.form, some values
-            # will be a 1-element list)
             if hasattr(value, '__iter__') and not isinstance(value, str):
-                # The ,= unpack of a singleton fails PEP8 (travis flake8 test)
                 value = value[0]
 
             if property == 'password':
