@@ -227,7 +227,6 @@
   </header>
 
   <div class="container">
-    <!-- CÓDIGO DO PRODUCT-->
     <div id="productDetails">
       <div id="productImageContainer">
         <img src="/static/assets/img/products/{{product.Image}}" alt="Product Image" id="productImage">
@@ -237,17 +236,15 @@
         <div id="productSizes">
           <h5 id="sizeLabel">Size:</h5>
           <select name="sizes">
-            <option value="1">S</option>
-            <option value="2">M</option>
-            <option value="3">L</option>
-            <option value="4">XL</option>
+            {% for size in available_sizes %}
+            <option value="{{ size.id_Size }}">{{ size.Name }}</option>
+            {% endfor %}
           </select>
         </div>
         <h5 id="productPrice">{{product.Price}}€</h5>
         <p id="productButton"><button type="button" id="cartButton"><b>ADD TO CART</b></button></p>
       </div>
     </div>
-    <!---->
   </div>
 
   <!-- FOOTER -->

@@ -9,6 +9,9 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 from apps.home.models import Product
 from apps.home.models import Category
+from apps.home.models import ProductBySize
+from apps.home.models import Size
+from apps import db
 
 @blueprint.route('/index')
 @login_required
@@ -30,18 +33,25 @@ def shop():
 @login_required
 def product_details(product_id):
     try:
+        print(f"Fetching details for product_id: {product_id}")
         product = Product.get_by_id(product_id)
-        print(product)
         if product is None:
+            print("Product not found")
             return render_template('home/page-404.html'), 404
-        return render_template('home/product_details.html', product=product)
+
+        # Fetch available sizes for the product
+        available_sizes = db.session.query(Size).join(ProductBySize, Size.id_Size == ProductBySize.id_Size).filter(ProductBySize.id_Product == product_id).all()
+        print(f"Available sizes: {available_sizes}")
+
+        return render_template('home/product_details.html', product=product, available_sizes=available_sizes)
     except TemplateNotFound:
+        print("Template not found")
         return render_template('home/page-404.html'), 404
     except Exception as e:
-        print(e)
+        print(f"Exception: {e}")
         return render_template('home/page-500.html'), 500
 
-
+    
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
