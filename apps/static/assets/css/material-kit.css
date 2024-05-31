@@ -118,6 +118,136 @@
     font-weight: 500;
   }
 
+  #TitleAuth{
+
+    font-family:'MyTitleFont' !important;
+    font-size: 3rem;
+    color: rgb(160, 160, 160);
+  
+  }
+
+  #cardLogin{
+    background-color: rgb(160, 160, 160) ;
+  }
+
+  #cardTeste{
+    background-color: rgb(160, 160, 160) ;
+  }
+
+  #headerLogin{
+    background-image: linear-gradient(195deg, #555454 0%, #3f3f3f 100%);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(51, 51, 51, 0.4) !important;
+  }
+
+  #buttonSignIn{
+    background-image: linear-gradient(195deg, #555454 0%, #3f3f3f 100%);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(51, 51, 51, 0.4) !important;
+  }
+
+  #SignUpRoute{
+    background-image: linear-gradient(195deg, #555454 0%, #3f3f3f 100%);
+  }
+
+  #textRemember{
+    color:  rgb(255, 255, 255);
+  }
+  
+  #textAccount{
+    color:  rgb(255, 255, 255);
+  }
+
+
+
+  #TitleAuth2{
+
+    font-family:'MyTitleFont' !important;
+    font-size: 3rem;
+    color: rgb(160, 160, 160);
+  
+  }
+
+  #cardLogin2{
+    background-color: rgb(160, 160, 160) ;
+  }
+
+  #cardTeste2{
+    background-color: rgb(160, 160, 160) ;
+  }
+
+
+
+  #headerLogin2{
+    background-image: linear-gradient(195deg, #555454 0%, #3f3f3f 100%);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(51, 51, 51, 0.4) !important;
+  }
+
+  #buttonSignIn2{
+    background-image: linear-gradient(195deg, #555454 0%, #3f3f3f 100%);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(51, 51, 51, 0.4) !important;
+  }
+
+  #SignUpRoute2{
+    background-image: linear-gradient(195deg, #555454 0%, #3f3f3f 100%);
+  }
+
+  #textRemember2{
+    color:  rgb(255, 255, 255);
+  }
+  
+  #textAccount2{
+    color:  rgb(255, 255, 255);
+  }
+
+
+  .form-control{
+    background-color:  rgb(255, 255, 255);
+  }
+
+  #myCheckbox:checked {
+    background-color: #626262;
+    border-color: #626262;
+  }
+
+  #terms{
+    color:  rgb(255, 255, 255);
+  }
+
+  
+  #terms2{
+    color:  rgb(255, 255, 255);
+    font-weight: bold;
+  }
+
+  #terms3{
+    color:  rgb(255, 255, 255);
+  }
+  
+
+
+ #inputAuth1{
+  background-color: white;
+  border-radius: 0.5rem;
+ }
+
+ #inputAuth2{
+  background-color: white;
+  border-radius: 0.5rem;
+ }
+ #inputAuth3{
+  background-color: white;
+  border-radius: 0.5rem;
+ }
+
+ #inputAuth4{
+  background-color: white;
+  border-radius: 0.5rem;
+ }
+
+ #inputAuth5{
+  background-color: white;
+  border-radius: 0.5rem;
+ }
+  
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
