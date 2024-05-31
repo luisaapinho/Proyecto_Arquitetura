@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from flask_login import UserMixin
 from apps import db, login_manager
-from apps.authentication.util import hash_pass
+from apps.authentication.util import hash_pass, verify_pass
 
 class Users(db.Model, UserMixin):
 
@@ -29,12 +29,40 @@ class Users(db.Model, UserMixin):
     def __repr__(self):
         return str(self.username)
 
-@login_manager.user_loader
-def user_loader(id):
-    return Users.query.filter_by(id=id).first()
+    @staticmethod
+    def updateName(id, username=None):
+        user = Users.query.get(id)
+        if user:
+            if username:
+                user.username = username
+            db.session.commit()
+            return True
+        return False
+    
+    @staticmethod
+    def updateEmail(id, email=None):
+        user = Users.query.get(id)
+        if user:
+            if email:
+                user.email = email
+            db.session.commit()
+            return True
+        return False
+    
+    @staticmethod
+    def update_password(self, old_password, new_password):
+        if verify_pass(old_password, self.password):
+            self.password = hash_pass(new_password)
+            db.session.commit()
+            return True
+        return False
 
-@login_manager.request_loader
-def request_loader(request):
-    username = request.form.get('username')
-    user = Users.query.filter_by(username=username).first()
-    return user if user else None
+    @login_manager.user_loader
+    def user_loader(id):
+        return Users.query.get(int(id))
+
+    @login_manager.request_loader
+    def request_loader(request):
+        username = request.form.get('username')
+        user = Users.query.filter_by(username=username).first()
+        return user if user else None
