@@ -66,7 +66,6 @@ def update_password():
     return render_template('home/index.html', segment='index')
 
 @blueprint.route('/shop')
-@login_required
 def shop():
         print("teste2")
         products = Product.get_all()
@@ -76,7 +75,6 @@ def shop():
         return render_template('home/shop.html', segment='shop', products=products, categories=categories)
 
 @blueprint.route('/shop/product/<int:product_id>')
-@login_required
 def product_details(product_id):
     try:
         print(f"Fetching details for product_id: {product_id}")
