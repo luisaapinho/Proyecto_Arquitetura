@@ -144,6 +144,12 @@
     .footer-logo {
       max-width: 50px;
     }
+
+    #quantity{
+      background-color: transparent;
+      color: rgb(197, 197, 197);
+      border: 1px solid rgb(197, 197, 197);
+    }
   </style>
 
  
@@ -157,23 +163,30 @@
   <div class="container">
     <div id="productDetails">
       <div id="productImageContainer">
-        <img src="/static/assets/img/products/{{product.Image}}" alt="Product Image" id="productImage">
+        <img src="/static/assets/img/products/{{ product.Image }}" alt="Product Image" id="productImage">
       </div>
       <div id="productInfoContainer">
         <form method="post" action="{{ url_for('home_blueprint.add_to_cart') }}">
           <h4 id="productTitle"><b>{{ product.Name }} {{ product.Description }}</b></h4>
           <div id="productSizes">
             <h5 id="sizeLabel">Size:</h5>
-            <select name="size_id">
-              {% for size in available_sizes %}
-                <option value="{{ size.id_Size }}">{{ size.Name }}</option>
+            <select name="size_id" id="sizeSelect">
+              {% for size, product_size in available_sizes %}
+                <option value="{{ size.id_Size }}" data-stock="{{ product_size.Stock }}">{{ size.Name }}</option>
               {% endfor %}
             </select>
           </div>
           <h5 id="productPrice">{{ product.Price }}€</h5>
+          <div id="productQuantity">
+            <label for="quantity"> <h5 id="sizeLabel">Quantity:</h5></label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1">
+          </div>
           <input type="hidden" name="product_id" value="{{ product.id }}">
-          <p id="productButton"><input type="submit" id="cartButton" value="Add to Cart"></p>
+          <p id="productButton">
+            <input type="submit" id="cartButton" value="{{ 'Add to Cart' if total_stock > 0 else 'Out of Stock' }}" {{ 'disabled' if total_stock == 0 }}>
+          </p>
         </form>
+        <p id="stockMessage"></p>
       </div>
     </div>
   </div>
@@ -274,6 +287,44 @@
           console.error(countUp2.error);
         };
       }
+
+
+      document.addEventListener("DOMContentLoaded", function () {
+      const sizeSelect = document.getElementById("sizeSelect");
+      const quantityInput = document.getElementById("quantity");
+      const cartButton = document.getElementById("cartButton");
+      const stockMessage = document.getElementById("stockMessage");
+
+      function updateStock() {
+        const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+        const stock = parseInt(selectedOption.getAttribute("data-stock"));
+
+        if (stock > 0) {
+          quantityInput.max = stock;
+          cartButton.disabled = false;
+          cartButton.value = "Add to Cart";
+          stockMessage.textContent = "";
+        } else {
+          cartButton.disabled = true;
+          cartButton.value = "No Stock";
+          stockMessage.textContent = "This size is out of stock.";
+        }
+
+        if (quantityInput.value > stock) {
+          quantityInput.value = stock;
+        }
+      }
+
+      sizeSelect.addEventListener("change", updateStock);
+      quantityInput.addEventListener("input", function () {
+        const max = parseInt(quantityInput.max);
+        if (quantityInput.value > max) {
+          quantityInput.value = max;
+        }
+      });
+
+      updateStock();
+    });
     </script>
   </body>
   </html>
