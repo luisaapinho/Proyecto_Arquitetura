@@ -1,14 +1,5 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 from flask import render_template, redirect, request, url_for
-from flask_login import (
-    current_user,
-    login_user,
-    logout_user
-)
+from flask_login import current_user, login_user, logout_user
 
 from apps import db, login_manager
 from apps.authentication import blueprint
@@ -25,8 +16,7 @@ def route_default():
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm(request.form)
-    if 'login' in request.form:
-
+    if request.method == 'POST' and 'login' in request.form:
         # Read form data
         username = request.form['username']
         password = request.form['password']
@@ -45,19 +35,17 @@ def login():
                                form=login_form)
 
     if not current_user.is_authenticated:
-        return render_template('accounts/login.html',
-                               form=login_form)
+        return render_template('accounts/login.html', form=login_form)
     return redirect(url_for('home_blueprint.index'))
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     create_account_form = CreateAccountForm(request.form)
-    if 'register' in request.form:
-
+    if request.method == 'POST' and 'register' in request.form:
         username = request.form['username']
         email = request.form['email']
 
-        # Check username exists
+        # Check if username exists
         user = Users.query.filter_by(username=username).first()
         if user:
             return render_template('accounts/register.html',
@@ -65,7 +53,7 @@ def register():
                                    success=False,
                                    form=create_account_form)
 
-        # Check email exists
+        # Check if email exists
         user = Users.query.filter_by(email=email).first()
         if user:
             return render_template('accounts/register.html',
@@ -73,7 +61,7 @@ def register():
                                    success=False,
                                    form=create_account_form)
 
-        # Else we can create the user
+        # Create the user
         user = Users(**request.form)
         db.session.add(user)
         db.session.commit()
@@ -86,8 +74,7 @@ def register():
                                success=True,
                                form=create_account_form)
 
-    else:
-        return render_template('accounts/register.html', form=create_account_form)
+    return render_template('accounts/register.html', form=create_account_form)
 
 @blueprint.route('/logout')
 def logout():
@@ -98,9 +85,11 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-   login_form = LoginForm(request.form)
-   return render_template('accounts/login.html', msg='You need to be authenticated to access to cart',form=login_form)
-
+    login_form = LoginForm(request.form)
+    if not current_user.is_authenticated:
+        return render_template('accounts/login.html', msg='You need to be authenticated to access the cart', form=login_form)
+    # Redirect to the cart page if the user is authenticated
+    return redirect(url_for('home_blueprint.cart'))
 
 @blueprint.errorhandler(403)
 def access_forbidden(error):
