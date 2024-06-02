@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="/static/assets/img/favicon.png">
 
-  <title >
+  <title>
     Glory
   </title>
 
@@ -48,12 +48,10 @@
       align-items: center;
     }
 
-    #productDetails {
-      border-radius: 1rem;
+    #cartContainer {
       display: flex;
       flex-wrap: wrap;
-      width: 60vw;
-      height: 70vh;
+      width: 80vw;
       justify-content: center;
       align-content: center;
       background-color: rgba(58, 58, 58, 0.815);
@@ -61,92 +59,82 @@
       margin-bottom: 10rem;
     }
 
-    #productImageContainer,
-    #productInfoContainer {
+    #cartItemsContainer,
+    #cartSummaryContainer {
+      padding: 2rem;
+      color: rgb(197, 197, 197);
+    }
+
+    #cartItemsContainer {
+      flex: 60%;
+    }
+
+    #cartSummaryContainer {
+      flex: 40%;
+      border-left: 1px solid rgb(197, 197, 197);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding-left: 3rem;
+      justify-content: space-between;
     }
 
-    #productImageContainer {
-      flex: 1;
-      text-align: center;
-    }
-
-    #productInfoContainer {
-      flex: 2;
-      color: rgb(197, 197, 197);
-    }
-
-    #productImage {
-      max-width: 40vw;
-      max-height: 65vh;
-      display: block;
-      margin: auto;
-    }
-
-    #productTitle,
-    #productDescription,
-    #productPrice,
-    #productSizes,
-    #productButton {
-      padding: 0.4rem;
-      width: 90%;
-      color: rgb(197, 197, 197);
-      text-align: left;
-      margin-right: 6rem;
+    .cart-item, .cart-item-image {
+      display: flex;
       margin-bottom: 1rem;
     }
 
-    #productSizes{
+    .cart-item img {
+      max-width: 100px;
+      margin-right: 1rem;
+    }
+
+    .cart-item-details {
       display: flex;
-    } 
-    #sizeLabel{
-      color: rgb(197, 197, 197);
-      padding-right: 1rem;
-    } 
-
-    #productSizes select {
-      background-color: transparent;
-      color: rgb(197, 197, 197);
-      border: 1px solid rgb(197, 197, 197);
+      flex-direction: column;
+      min-width: 20rem;
     }
 
-    #productSizes option {
-      background-color: rgba(58, 58, 58, 0.815);
-      color: rgb(197, 197, 197);
+    .cart-item-details p {
+      margin: 0.2rem 0;
     }
 
-    #cartButton {
+    .total-price {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    #imageProduct{
+      max-width: 10vw;
+      max-height: 15vh;
+    }
+
+    #checkoutButton {
       background-color: rgba(197, 197, 197, 0.966);
       border-style: none;
       align-items: center;
       text-align: center;
       cursor: pointer;
       color: rgb(37, 37, 37);
-      margin-top: 1rem;
-      padding: 0.6rem;
-      border-radius: 0.1rem;
+      padding: 0.4rem;
+      border-radius: 0.2rem;
+      width: 100%;
     }
 
+    .deleteDiv{
+      display: flex;
+      width: 50rem;
+      flex-direction: column;
+      align-items: flex-end;
+      
 
-    .navbar {
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0);
-    }
-    
-
-    footer {
-      background-color: #f8f9fa;
     }
 
-    .footer-logo {
-      max-width: 50px;
+    #deleteButton{
+      background-color: rgba(197, 197, 197, 0.966);
+      border: 0;
+      border-radius: 0.2rem;
     }
+
   </style>
-
- 
 </head>
 
 <body class="presentation-page bg-gray-200">
@@ -170,6 +158,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{{url_for('home_blueprint.shop')}}">Store</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{{url_for('home_blueprint.cart')}}">Cart</a>
             </li>
             {% if current_user.is_authenticated %}
             <li class="nav-item ms-lg-auto">
@@ -203,29 +194,32 @@
   </header>
 
   <div class="container">
-    <div id="productDetails">
-      <div id="productImageContainer">
-        <img src="/static/assets/img/products/{{product.Image}}" alt="Product Image" id="productImage">
-      </div>
-      <div id="productInfoContainer">
-        <form method="post" action="{{ url_for('home_blueprint.add_to_cart') }}">
-          <h4 id="productTitle"><b>{{ product.Name }} {{ product.Description }}</b></h4>
-          <div id="productSizes">
-            <h5 id="sizeLabel">Size:</h5>
-            <select name="size_id">
-              {% for size in available_sizes %}
-                <option value="{{ size.id_Size }}">{{ size.Name }}</option>
-              {% endfor %}
-            </select>
+    <div id="cartContainer">
+      <div id="cartItemsContainer">
+        {% for item in cart_details %}
+        <div class="cart-item-image">
+          <div>
+             <img src="./static/assets/img/products/{{ item.product_image }}" alt="Product Image" id="imageProduct">
           </div>
-          <h5 id="productPrice">{{ product.Price }}€</h5>
-          <input type="hidden" name="product_id" value="{{ product.id }}">
-          <p id="productButton"><input type="submit" id="cartButton" value="Add to Cart"></p>
-        </form>
+          <div class="cart-item-details">
+            <p><strong>{{ item.product_name }}</strong> - {{ item.product_description }}</p>
+            <p>Size: <b>{{ item.size }}&nbsp &nbsp &nbsp</b>Quantity: <b>{{ item.quantity }}</b></p>
+            <p>Subtotal: ${{ item.item_total }}</p>
+          </div>
+          <div class="deleteDiv">
+            <form action="{{url_for('home_blueprint.delete_item_cart', id=item.id_Cart)}}" method="post">
+              <input type="submit" value="X" id="deleteButton">
+          </form>
+          </div>
+        </div>
+        {% endfor %}
+        <p class="total-price">Total: ${{ total_price }}</p>
+        <button id="checkoutButton">Proceed to Checkout</button>
       </div>
     </div>
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer pt-5 " id="footer">
 
     <div class="container">
@@ -235,7 +229,7 @@
           <!-- -------- FOOTER LOGO AND NAME OF THE APP ------- -->
           <div>
             <a href="https://appseed.us/apps/flask-apps/flask-material-kit">
-              <img src="/static/assets/img/logoProject.png" class="footer-logo" alt="main_logo">
+              <img src="./static/assets/img/logoProject.png" class="footer-logo" alt="main_logo">
             </a>
             <h6 class="font-weight-bolder mb-4" id="titleFooter">Glory</h6>
           </div>

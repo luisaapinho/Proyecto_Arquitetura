@@ -4,13 +4,14 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from apps.home import blueprint
-from flask import render_template, request
-from flask_login import login_required
+from flask import render_template, request, Response,redirect, url_for
+from flask_login import login_required,current_user
 from jinja2 import TemplateNotFound
 from apps.home.models import Product
 from apps.home.models import Category
 from apps.home.models import ProductBySize
 from apps.home.models import Size
+from apps.home.models import Cart
 from apps import db
 
 @blueprint.route('/index')
@@ -50,6 +51,86 @@ def product_details(product_id):
     except Exception as e:
         print(f"Exception: {e}")
         return render_template('home/page-500.html'), 500
+    
+
+@blueprint.route('/add-to-cart', methods=['POST'])
+@login_required
+def add_to_cart():
+    try:
+        product_id = request.form.get('product_id')
+        size_id = request.form.get('size_id')
+
+        print(f"Product ID: {product_id}, Size ID: {size_id}")
+
+        Cart.add_item(current_user.id, product_id, size_id)
+
+        return redirect(url_for('home_blueprint.product_details', product_id=product_id))
+        
+
+
+    except Exception as e:
+        print(f"Exception: {e}")
+        return render_template('home/page-500.html'), 500
+        
+
+@blueprint.route('/cart')
+@login_required
+def cart():
+    try:
+        # Fetch cart items for the current user
+        user_id = current_user.id  # Assuming `current_user` has an `id` attribute
+        cart_items = Cart.get_by_user(user_id)
+        
+        # Collect product details and calculate total price
+        cart_details = []
+        total_price = 0
+        for item in cart_items:
+            product_size = ProductBySize.query.get(item.id_ProductSize)
+            product = Product.query.get(product_size.id_Product)
+            size = Size.query.get(product_size.id_Size)
+            
+            item_total = product.Price * item.Quantity
+            total_price += item_total
+            
+            cart_details.append({
+                'id_Cart': item.id_Cart,
+                'product_name': product.Name,
+                'product_description': product.Description,
+                'product_image': product.Image,
+                'product_price': product.Price,
+                'size': size.Name,
+                'quantity': item.Quantity,
+                'item_total': item_total
+            })
+        
+        print(cart_details)
+        return render_template('home/cart.html', cart_details=cart_details, total_price=total_price)
+    except TemplateNotFound:
+        return render_template('home/page-404.html'), 404
+    except Exception as e:
+        print(f"Exception: {e}")
+        return render_template('home/page-500.html'), 500
+    
+
+    
+    
+
+@blueprint.route('/delete_item_cart/<int:id>', methods=['POST'])
+@login_required
+def delete_item_cart(id):
+    print(id)
+    Cart.delete(id)
+    return redirect(url_for('home_blueprint.cart'))
+
+
+
+    
+
+
+
+
+
+    
 
     
 @blueprint.route('/<template>')
