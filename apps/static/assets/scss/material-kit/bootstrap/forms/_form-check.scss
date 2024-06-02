@@ -48,7 +48,7 @@
   }
 
   &:checked {
-    background-color: $form-check-input-checked-bg-color;
+    background-color: $rgb(255, 255, 255);
     border-color: $form-check-input-checked-border-color;
 
     &[type="checkbox"] {
