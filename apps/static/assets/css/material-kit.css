@@ -97,6 +97,12 @@
     color: rgb(186, 185, 185);
   
   }
+  #titleNav{
+    font-family:'MyTitleFont' !important;
+    font-size: 2.5rem;
+    color: rgb(186, 185, 185);
+  
+  }
 
   #footer{
     background-color: rgb(92, 92, 92);
