@@ -4,6 +4,7 @@ from apps.authentication.forms import LoginForm, CreateAccountForm
 from apps.authentication.models import Users
 from apps.authentication.util import verify_pass
 
+# Class Product 
 class Product(db.Model):
 
 
@@ -24,6 +25,8 @@ class Product(db.Model):
     def get_by_id(id):
         return Product.query.get(id)
     
+
+#Class Category
 class Category(db.Model):
 
     __tablename__ = 'category'
@@ -36,7 +39,7 @@ class Category(db.Model):
         return Category.query.all()
     
 
-
+#Class ProductBySize
 class ProductBySize(db.Model):
     __tablename__ = 'productpersize'
 
@@ -54,7 +57,7 @@ class ProductBySize(db.Model):
         return Product.query.get(id)
 
     
-
+#Class Size
 class Size(db.Model):
      
     __tablename__ = 'sizes'
@@ -66,6 +69,7 @@ class Size(db.Model):
     def get_all():
         return Size.query.all()
     
+#Class Cart
 class Cart(db.Model):
     __tablename__ = 'cart'
 
@@ -80,12 +84,19 @@ class Cart(db.Model):
     def get_by_user(user_id):
         return Cart.query.filter_by(id_User=user_id).all()
     
+
+    #Add Item to the Cart Funcion
     @staticmethod
     def add_item(user_id, product_id, size_id):
+        #Take the product with its size so a blue shirt can have a lot of sizes, so this is to take the blue shirt size XS
         product_size = ProductBySize.query.filter_by(id_Product=product_id, id_Size=size_id).first()
+
+        #If theres not the shirt in the size available display error
         if not product_size:
             raise ValueError("Invalid product or size")
 
+        # Filter the UserID  and the product with the right size, and if the cart_item is already on the car then just add up the 
+        #quantity, if not then add the product with the quantity 1
         cart_item = Cart.query.filter_by(id_User=user_id, id_ProductSize=product_size.id_ProductSize).first()
         if cart_item:
             cart_item.Quantity += 1

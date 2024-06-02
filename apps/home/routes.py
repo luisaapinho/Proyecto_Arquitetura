@@ -15,15 +15,19 @@ from apps.home.models import Size
 from apps.home.models import Cart
 from apps import db
 
+#INDEX - HOME
 @blueprint.route('/index')
 def index():
     return render_template('home/index.html', segment='index')
 
+#PROFILE
 @blueprint.route('/profile')
 @login_required
 def profile():
     return render_template('home/profile.html', user=current_user)
 
+
+#UPDATE USERNAME
 @blueprint.route('/update_username', methods=['POST'])
 @login_required
 def update_username():
@@ -36,6 +40,7 @@ def update_username():
             flash('Failed to update username.', 'danger')
     return redirect(url_for('home_blueprint.profile'))
 
+#UPDATE EMAIL
 @blueprint.route('/update_email', methods=['POST'])
 @login_required
 def update_email():
@@ -48,6 +53,7 @@ def update_email():
             flash('Failed to update email.', 'danger')
     return redirect(url_for('home_blueprint.profile'))
 
+#UPDATE PASSWORD
 @blueprint.route('/update_password', methods=['POST'])
 @login_required
 def update_password():
@@ -65,6 +71,7 @@ def update_password():
     print("teste1")
     return render_template('home/index.html', segment='index')
 
+#SHOP
 @blueprint.route('/shop')
 def shop():
         print("teste2")
@@ -74,6 +81,7 @@ def shop():
         print(products)  # Check the products being retrieved
         return render_template('home/shop.html', segment='shop', products=products, categories=categories)
 
+#PRODUCT DETAILS
 @blueprint.route('/shop/product/<int:product_id>')
 def product_details(product_id):
     try:
@@ -97,6 +105,7 @@ def product_details(product_id):
         return render_template('home/page-500.html'), 500
     
 
+#ADD TO CART
 @blueprint.route('/add-to-cart', methods=['POST'])
 @login_required
 def add_to_cart():
@@ -117,6 +126,7 @@ def add_to_cart():
         return render_template('home/page-500.html'), 500
         
 
+#CART
 @blueprint.route('/cart')
 @login_required
 def cart():
@@ -157,7 +167,7 @@ def cart():
     
 
     
-    
+# Delete ITEM CARD
 
 @blueprint.route('/delete_item_cart/<int:id>', methods=['POST'])
 @login_required
@@ -168,9 +178,7 @@ def delete_item_cart(id):
 
 
 
-    
-# views.py
-
+# BUY ITEMS
 @blueprint.route('/checkout', methods=['POST'])
 @login_required
 def checkout():
@@ -209,9 +217,7 @@ def checkout():
 
 
 
-    
-
-    
+ # views.py   
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
