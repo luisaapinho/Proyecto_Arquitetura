@@ -7,17 +7,22 @@
     <div class="collapse navbar-collapse" id="navbar-header-2">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a class="nav-link text-white" href="/about-us.html">Home</a>
+          <a class="nav-link text-white" href="/index.html">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="javascript:;">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="javascript:;">Contact Us</a>
-        </li>
+          <a class="nav-link text-white" href="javascript:;">Shop</a>
+        </li> 
+       
       </ul>
       <ul class="nav navbar-nav">
         {% if current_user.is_authenticated %}
+
+        <li class="nav-item ms-lg-auto">
+          <a class="nav-link nav-link-icon me-2" href="{{ url_for('home_blueprint.profile') }}">
+            <p class="d-inline text-sm z-index-1 " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile">Profile</p>
+          </a>
+        </li>
+
         <li class="nav-item ms-lg-auto">
           <a class="nav-link nav-link-icon me-2" href="{{ url_for('authentication_blueprint.logout') }}">
             <i class="fa fa-sign-out me-1"></i>
@@ -25,11 +30,7 @@
           </a>
         </li>
 
-        <li class="nav-item ms-lg-auto">
-          <a class="nav-link nav-link-icon me-2" href="{{ url_for('home_blueprint.profile') }}">
-            <p class="d-inline text-sm z-index-1 " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile">Profile</p>
-          </a>
-        </li>
+        
         {% endif %}
       </ul>
     </div>
