@@ -83,12 +83,19 @@ def product_details(product_id):
             print("Product not found")
             return render_template('home/page-404.html'), 404
 
-        # Fetch available sizes for the product
-        available_sizes = db.session.query(Size).join(
-            ProductBySize, Size.id_Size == ProductBySize.id_Size).filter(ProductBySize.id_Product == product_id).all()
+        # Fetch available sizes for the product with stock
+        available_sizes = db.session.query(Size, ProductBySize).join(
+            ProductBySize, Size.id_Size == ProductBySize.id_Size
+        ).filter(
+            ProductBySize.id_Product == product_id,
+            ProductBySize.Stock > 0
+        ).all()
+        
+        total_stock = sum([product_size.Stock for size, product_size in available_sizes])
+        
         print(f"Available sizes: {available_sizes}")
 
-        return render_template('home/product_details.html', product=product, available_sizes=available_sizes)
+        return render_template('home/product_details.html', product=product, available_sizes=available_sizes, total_stock=total_stock)
     except TemplateNotFound:
         print("Template not found")
         return render_template('home/page-404.html'), 404
@@ -103,15 +110,13 @@ def add_to_cart():
     try:
         product_id = request.form.get('product_id')
         size_id = request.form.get('size_id')
+        quantity = int(request.form.get('quantity'))
 
-        print(f"Product ID: {product_id}, Size ID: {size_id}")
+        print(f"Product ID: {product_id}, Size ID: {size_id}, Quantity: {quantity}")
 
-        Cart.add_item(current_user.id, product_id, size_id)
+        Cart.add_item(current_user.id, product_id, size_id, quantity)
 
         return redirect(url_for('home_blueprint.product_details', product_id=product_id))
-        
-
-
     except Exception as e:
         print(f"Exception: {e}")
         return render_template('home/page-500.html'), 500

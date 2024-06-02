@@ -81,18 +81,23 @@ class Cart(db.Model):
         return Cart.query.filter_by(id_User=user_id).all()
     
     @staticmethod
-    def add_item(user_id, product_id, size_id):
+    def add_item(user_id, product_id, size_id, quantity=1):
         product_size = ProductBySize.query.filter_by(id_Product=product_id, id_Size=size_id).first()
         if not product_size:
             raise ValueError("Invalid product or size")
 
+        if product_size.Stock < quantity:
+            raise ValueError("Not enough stock")
+
         cart_item = Cart.query.filter_by(id_User=user_id, id_ProductSize=product_size.id_ProductSize).first()
         if cart_item:
-            cart_item.Quantity += 1
+            if cart_item.Quantity + quantity > product_size.Stock:
+                raise ValueError("Not enough stock")
+            cart_item.Quantity += quantity
         else:
-            cart_item = Cart(id_User=user_id, id_ProductSize=product_size.id_ProductSize, Quantity=1)
+            cart_item = Cart(id_User=user_id, id_ProductSize=product_size.id_ProductSize, Quantity=quantity)
             db.session.add(cart_item)
-        
+
         db.session.commit()
         return cart_item
     
