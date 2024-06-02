@@ -98,7 +98,9 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return render_template('home/page-403.html'), 403
+   login_form = LoginForm(request.form)
+   return render_template('accounts/login.html', msg='You need to be authenticated to access to cart',form=login_form)
+
 
 @blueprint.errorhandler(403)
 def access_forbidden(error):
