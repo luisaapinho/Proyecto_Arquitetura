@@ -10,7 +10,6 @@ from jinja2 import TemplateNotFound
 from apps.authentication.models import Users
 
 @blueprint.route('/index')
-@login_required
 def index():
     return render_template('home/index.html', segment='index')
 
