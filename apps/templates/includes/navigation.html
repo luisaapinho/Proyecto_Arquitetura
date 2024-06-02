@@ -10,9 +10,11 @@
           <a class="nav-link text-white" href="/index.html">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="javascript:;">Shop</a>
+          <a class="nav-link text-white" href="{{url_for('home_blueprint.shop')}}">Shop</a>
         </li> 
-       
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{{url_for('home_blueprint.cart')}}">Cart</a>
+        </li>
       </ul>
       <ul class="nav navbar-nav">
         {% if current_user.is_authenticated %}
