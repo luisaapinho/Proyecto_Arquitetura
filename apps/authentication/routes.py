@@ -92,7 +92,7 @@ def register():
 @blueprint.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('authentication_blueprint.login'))
+    return redirect(url_for('home_blueprint.index'))
 
 # Errors
 
