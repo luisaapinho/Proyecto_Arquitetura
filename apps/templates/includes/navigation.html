@@ -14,7 +14,24 @@
         </li> 
        
       </ul>
+
       <ul class="nav navbar-nav">
+
+
+        {% if current_user.is_authenticated == false %}
+
+        <li class="nav-item ms-lg-auto">
+          <a class="nav-link nav-link-icon me-2" href="{{ url_for('authentication_blueprint.login') }}">
+            <i class="fa fa-sign-out me-1"></i>
+            <p class="d-inline text-sm z-index-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SignIN">Login</p>
+          </a>
+        </li>
+
+        
+        {% endif %}
+
+
+
         {% if current_user.is_authenticated %}
 
         <li class="nav-item ms-lg-auto">
