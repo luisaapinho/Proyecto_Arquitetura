@@ -84,7 +84,8 @@ def product_details(product_id):
             return render_template('home/page-404.html'), 404
 
         # Fetch available sizes for the product
-        available_sizes = db.session.query(Size).join(ProductBySize, Size.id_Size == ProductBySize.id_Size).filter(ProductBySize.id_Product == product_id).all()
+        available_sizes = db.session.query(Size).join(
+            ProductBySize, Size.id_Size == ProductBySize.id_Size).filter(ProductBySize.id_Product == product_id).all()
         print(f"Available sizes: {available_sizes}")
 
         return render_template('home/product_details.html', product=product, available_sizes=available_sizes)
@@ -168,6 +169,41 @@ def delete_item_cart(id):
 
 
     
+# views.py
+
+@blueprint.route('/checkout', methods=['POST'])
+@login_required
+def checkout():
+    try:
+        user_id = current_user.id
+        cart_items = Cart.get_by_user(user_id)
+
+        # Loop through cart items and update the stock
+        for item in cart_items:
+            product_size = ProductBySize.query.get(item.id_ProductSize)
+            
+            if product_size.Stock < item.Quantity:
+                flash(f'Not enough stock for product ID {product_size.id_Product}. Only {product_size.Stock} left.', 'danger')
+                return redirect(url_for('home_blueprint.cart'))
+            
+            product_size.Stock -= item.Quantity
+            db.session.add(product_size)
+        
+        db.session.commit()
+
+        # Clear the user's cart after successful purchase
+        for item in cart_items:
+            db.session.delete(item)
+        
+        db.session.commit()
+
+        flash('Purchase successful!', 'success')
+        return redirect(url_for('home_blueprint.shop'))
+    except Exception as e:
+        db.session.rollback()
+        print(f"Exception: {e}")
+        flash('An error occurred during the purchase process. Please try again.', 'danger')
+        return redirect(url_for('home_blueprint.cart'))
 
 
 

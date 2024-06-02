@@ -38,14 +38,12 @@ class Category(db.Model):
 
 
 class ProductBySize(db.Model):
-
-
     __tablename__ = 'productpersize'
 
     id_ProductSize = db.Column(db.Integer, primary_key=True)
     id_Product = db.Column(db.Integer)
     id_Size = db.Column(db.Integer)
-    Stock = db.Column(db.Integer)
+    Stock = db.Column(db.Integer)  # This is the stock field to track available quantities
 
     @staticmethod
     def get_all():
@@ -54,6 +52,7 @@ class ProductBySize(db.Model):
     @staticmethod
     def get_by_id(id):
         return Product.query.get(id)
+
     
 
 class Size(db.Model):
